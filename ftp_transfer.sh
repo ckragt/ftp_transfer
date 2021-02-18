@@ -11,7 +11,7 @@ declare -A ftpoption; declare -A journaloption; declare -A diroption
 diroption=([local]="/ftpfs/user/test/_empf" [files]="*.csv")
 
 # ftp settings
-ftpoption=([mode]="binary" [host]="10.1.1.190" [user]="datax" [pass]="test123" [dir]="/datain")
+ftpoption=([mode]="binary" [dataops]="mput" [host]="10.1.1.190" [user]="datax" [pass]="test123" [dir]="/datain")
 
 # journal settings
 journaloption=([type]="db" [access]="$basepath/config.sql.conf" [host]="10.1.1.190" [port]="3306" [database]="journal" [table]="ftptrans_test")
@@ -85,7 +85,7 @@ function __run () {
 			lcd ${diroption[local]}
 			cd ${ftpoption[dir]}
 			prompt
-			mput ${diroption[files]}
+			${ftpoption[dataops]} ${diroption[files]}
 			quit
 		ftpcmd
 		lastexitcode=$?
