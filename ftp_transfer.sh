@@ -48,12 +48,15 @@ function __log () {
 	if [ "$logtype" == "file" ]; then
 		__logToFile
 	elif [ "$logtype" == "db" ]; then
-		#if nc -z -v -w2 ${journaloption[host]} ${journaloption[port]} &> /dev/null; then
-		nc -z -v -w2 ${journaloption[host]} ${journaloption[port]} &> /dev/null
-		if [ $? = 0 ]; then
-			__logToDatabase
+		if $(dpkg -s mysql-client &> /dev/null)
+		then
+			if $(nc -z -v -w2 ${journaloption[host]} ${journaloption[port]} &> /dev/null)
+			then
+				__logToDatabase
+			else
+				__logToFile
+			fi
 		else
-
 			__logToFile
 		fi
 	fi
